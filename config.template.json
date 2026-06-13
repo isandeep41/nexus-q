@@ -1,0 +1,8 @@
+{
+  "ibm_quantum": {
+    "token": "YOUR_API_TOKEN",
+    "hub": "ibm-q",
+    "group": "open",
+    "project": "main"
+  }
+}
