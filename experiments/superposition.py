@@ -6,7 +6,7 @@ using a Hadamard gate, and then measure its state.
 """
 
 from qiskit import QuantumCircuit
-from qiskit.primitives import Sampler
+from qiskit.primitives import StatevectorSampler
 
 def run_superposition_experiment():
     # 1. Create a Quantum Circuit with 1 qubit and 1 classical bit
@@ -21,17 +21,18 @@ def run_superposition_experiment():
     print("Circuit Diagram:")
     print(qc.draw())
 
-    # 4. Execute the circuit using the Sampler primitive
-    sampler = Sampler()
-    job = sampler.run(qc)
+    # 4. Execute the circuit using the StatevectorSampler primitive
+    sampler = StatevectorSampler()
+    job = sampler.run([qc])
     result = job.result()
     
     # 5. Extract probabilities
-    quasi_dists = result.quasi_dists[0]
+    counts = result[0].data.c.get_counts()
+    shots = sum(counts.values())
     
     print("\nResults (Quasi-Probabilities):")
-    print(f"State |0>: {quasi_dists.get(0, 0):.4f}")
-    print(f"State |1>: {quasi_dists.get(1, 0):.4f}")
+    print(f"State |0>: {counts.get('0', 0)/shots:.4f}")
+    print(f"State |1>: {counts.get('1', 0)/shots:.4f}")
     print("Due to superposition, you should see roughly a 50/50 split.")
 
 if __name__ == "__main__":

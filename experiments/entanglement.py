@@ -6,7 +6,7 @@ and measure them, showing that their outcomes are perfectly correlated.
 """
 
 from qiskit import QuantumCircuit
-from qiskit.primitives import Sampler
+from qiskit.primitives import StatevectorSampler
 
 def run_entanglement_experiment():
     # 1. Create a Quantum Circuit with 2 qubits and 2 classical bits
@@ -24,18 +24,19 @@ def run_entanglement_experiment():
     print("Circuit Diagram:")
     print(qc.draw())
 
-    # 5. Execute the circuit using the Sampler primitive
-    sampler = Sampler()
-    job = sampler.run(qc)
+    # 5. Execute the circuit using the StatevectorSampler primitive
+    sampler = StatevectorSampler()
+    job = sampler.run([qc])
     result = job.result()
     
     # 6. Extract probabilities
-    quasi_dists = result.quasi_dists[0]
+    counts = result[0].data.c.get_counts()
+    shots = sum(counts.values())
     
     print("\nResults (Quasi-Probabilities):")
     # Qiskit uses little-endian ordering, so bit 0 is the rightmost bit
-    print(f"State |00>: {quasi_dists.get(0, 0):.4f}")
-    print(f"State |11>: {quasi_dists.get(3, 0):.4f}")
+    print(f"State |00>: {counts.get('00', 0)/shots:.4f}")
+    print(f"State |11>: {counts.get('11', 0)/shots:.4f}")
     print("Notice the strong correlation between the two qubits, indicative of entanglement.")
 
 if __name__ == "__main__":
