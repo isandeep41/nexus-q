@@ -1,2 +1,2 @@
-qiskit>=1.0.0
+qiskit>=2.4.2
 pytest>=7.0.0
